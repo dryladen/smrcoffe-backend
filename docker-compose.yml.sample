@@ -1,0 +1,59 @@
+services:
+    database:
+        image: postgis/postgis:13-master
+        restart: always
+        volumes:
+            - ./data/database:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_USER: "example_user"
+            POSTGRES_PASSWORD: "example_password"
+            POSTGRES_DB: "example_db"
+        healthcheck:
+            test: ["CMD", "pg_isready", "--host=localhost", "--username=example_user"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_interval: 5s
+            start_period: 30s
+
+    directus:
+        image: directus/directus:11.9.2
+        restart: always
+        ports:
+            - 8055:8055
+        volumes:
+            - ./uploads:/directus/uploads
+            - ./extensions:/directus/extensions
+        depends_on:
+          database:
+            condition: service_healthy
+        environment:
+            SECRET: "your_secret_here"
+            DB_CLIENT: "pg"
+            DB_HOST: "database"
+            DB_PORT: "5432"
+            DB_DATABASE: "example_db"
+            DB_USER: "example_user"
+            DB_PASSWORD: "example_password"
+            MAX_PAYLOAD_SIZE: 500mb
+            ADMIN_EMAIL: "admin@example.com"
+            ADMIN_PASSWORD: "example_admin_password"
+            PUBLIC_URL: ""
+            CORS_ENABLE: "true"
+            CORS_ORIGIN: "http://localhost:3000,http://127.0.0.1:3000"
+            WEBSOCKETS_ENABLED: "true"
+            EXTENSIONS_AUTO_RELOAD: "true"
+            EXTENSIONS_PATH: "/directus/extensions"
+            STORAGE_LOCATIONS: "s3"
+            STORAGE_S3_DRIVER: "s3"
+            STORAGE_S3_KEY: "your_s3_key"
+            STORAGE_S3_SECRET: "your_s3_secret"
+            STORAGE_S3_BUCKET: "your_s3_bucket"
+            STORAGE_S3_REGION: "your_s3_region"
+            # EMAIL_TRANSPORT: "ses"
+            # EMAIL_FROM: "noreply@example.com"
+            # EMAIL_SES_CREDENTIALS__ACCESS_KEY_ID: "your_access_key_id"
+            # EMAIL_SES_CREDENTIALS__SECRET_ACCESS_KEY: "your_secret_access_key"
+            # EMAIL_SES_REGION: "your_ses_region"
