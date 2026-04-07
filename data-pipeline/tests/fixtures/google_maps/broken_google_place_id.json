@@ -1,0 +1,19 @@
+[
+  {
+    "source_platform": "google_maps",
+    "run_id": "fixture-google-placeid-001",
+    "scraped_at": "2026-04-05T20:19:32+00:00",
+    "query": "cafe in Samarinda",
+    "source_record_id": "https://maps.app.goo.gl/zSS7Qt8n7n2dHsoFA",
+    "raw": {
+      "name": "YOU Coffee and Brunch",
+      "category": "Coffee shop",
+      "address": "Jl. Gamelan No.2, Dadi Mulya, Privab, Kota Samarinda, Kalimantan Timur 75117, Indonesia",
+      "gmaps_url": "https://maps.app.goo.gl/zSS7Qt8n7n2dHsoFA",
+      "maps_link": "https://www.google.com/maps/place/YOU+Coffee+and+Brunch/@-0.4857808,117.1123437,14z/data=!4m10!1m2!2m1!1scafe+in+Samarinda!3m6!1s0x2df67f38a37d8527:0x4291ca857ca785ef!8m2!3d-0.4857808!4d117.1483926!15sChFjYWZlIGluIFNhbWFyaW5kYVoTIhFjYWZlIGluIHNhbWFyaW5kYZIBC2NvZmZlZV9zaG9wmgEjQ2haRFNVaE5NRzluUzBWSlEwRm5TVVJQY0V0SFlXUm5FQUXgAQD6AQQIdxA0!16s%2Fg%2F11rs2qz1zj?hl=en&entry=ttu&g_ep=EgoyMDI2MDQwMS4wIKXMDSoASAFQAw%3D%3D",
+      "google_place_id": "cafe+in+Samarinda",
+      "latitude": -0.4857808,
+      "longitude": 117.1123437
+    }
+  }
+]

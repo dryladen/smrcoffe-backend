@@ -46,3 +46,10 @@ yarn-error.log*
 next-env.d.ts
 
 .idea
+
+# python
+venv/
+.sisyphus/
+__pycache__/
+.pytest_cache/
+.playwright-mcp/

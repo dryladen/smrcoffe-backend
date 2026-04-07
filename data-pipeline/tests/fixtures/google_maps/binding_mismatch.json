@@ -1,0 +1,36 @@
+[
+  {
+    "source_platform": "google_maps",
+    "run_id": "fixture-google-binding-001",
+    "scraped_at": "2026-04-05T20:21:32+00:00",
+    "query": "cafe in Samarinda",
+    "source_record_id": "https://maps.app.goo.gl/EqJD6eiwrCiqphoX6",
+    "raw": {
+      "name": "YOU Coffee and Brunch",
+      "category": "Coffee shop",
+      "address": "Jl. Gamelan No.2, Dadi Mulya, Privab, Kota Samarinda, Kalimantan Timur 75117, Indonesia",
+      "gmaps_url": "https://maps.app.goo.gl/EqJD6eiwrCiqphoX6",
+      "maps_link": "https://www.google.com/maps/place/Coffee+%26+Co/@-0.4857808,117.1123437,14z/data=!4m10!1m2!2m1!1scafe+in+Samarinda!3m6!1s0x2df67f6f148cc535:0x525ac106c2643821!8m2!3d-0.5031129!4d117.1520403!15sChFjYWZlIGluIFNhbWFyaW5kYVoTIhFjYWZlIGluIHNhbWFyaW5kYZIBC2NvZmZlZV9zaG9wmgEkQ2hkRFNVaE5NRzluUzBWSlEwRm5TVVF6YVhSUU1USjNSUkFC4AEA-gEECAAQLA!16s%2Fg%2F11ngjysnr5?hl=en&entry=ttu&g_ep=EgoyMDI2MDQwMS4wIKXMDSoASAFQAw%3D%3D",
+      "google_place_id": "cafe+in+Samarinda",
+      "latitude": -0.4857808,
+      "longitude": 117.1123437
+    }
+  },
+  {
+    "source_platform": "google_maps",
+    "run_id": "fixture-google-binding-002",
+    "scraped_at": "2026-04-05T20:22:32+00:00",
+    "query": "cafe in Samarinda",
+    "source_record_id": "https://maps.app.goo.gl/wnn8BntajttGqtDZ8",
+    "raw": {
+      "name": "Coffee & Co",
+      "category": "Coffee shop",
+      "address": "Jl. Mulawarman No.171, Pelabuhan, Kec. Samarinda Kota, Kota Samarinda, Kalimantan Timur 75242, Indonesia",
+      "gmaps_url": "https://maps.app.goo.gl/wnn8BntajttGqtDZ8",
+      "maps_link": "https://www.google.com/maps/place/Seraung+Coffice/@-0.4857808,117.1123437,14z/data=!4m10!1m2!2m1!1scafe+in+Samarinda!3m6!1s0x2df67f478b0ac8bd:0xeb396aa129873394!8m2!3d-0.4872171!4d117.1325558!15sChFjYWZlIGluIFNhbWFyaW5kYVoTIhFjYWZlIGluIHNhbWFyaW5kYZIBBGNhZmWaASRDaGREU1VoTk1HOW5TMFZKUTBGblNVUndNWEpsZUhWQlJSQULgAQD6AQQIJhAk!16s%2Fg%2F11txd1z0zp?hl=en&entry=ttu&g_ep=EgoyMDI2MDQwMS4wIKXMDSoASAFQAw%3D%3D",
+      "google_place_id": "cafe+in+Samarinda",
+      "latitude": -0.4857808,
+      "longitude": 117.1123437
+    }
+  }
+]

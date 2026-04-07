@@ -1,0 +1,118 @@
+<mxfile host="app.diagrams.net" modified="2026-04-04T01:18:00.000Z" agent="Mozilla/5.0" version="24.7.17" editor="draw.io" compressed="false">
+  <diagram id="samarinda-scraper-v1" name="Page-1">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0" adaptiveColors="auto">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="10" value="External Sources" style="swimlane;html=1;rounded=1;whiteSpace=wrap;startSize=30;fillColor=#f8f1e7;strokeColor=#b26b2e;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="140" width="300" height="340" as="geometry"/>
+        </mxCell>
+        <mxCell id="11" value="Google Maps&#xa;(Primary)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="10">
+          <mxGeometry x="30" y="50" width="240" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="12" value="TikTok&#xa;(Secondary)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="10">
+          <mxGeometry x="30" y="150" width="240" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="13" value="Instagram&#xa;(Tertiary)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="10">
+          <mxGeometry x="30" y="250" width="240" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="20" value="8GB VPS Scraper Runtime" style="swimlane;html=1;rounded=1;whiteSpace=wrap;startSize=30;fillColor=#eaf3ea;strokeColor=#4f8a5b;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="390" y="70" width="450" height="500" as="geometry"/>
+        </mxCell>
+        <mxCell id="21" value="Scheduler (cron/APScheduler)&#xa;24/7 with source-based timing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="20">
+          <mxGeometry x="35" y="50" width="175" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="22" value="Cafe list + keyword seeds" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="20">
+          <mxGeometry x="240" y="50" width="175" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="23" value="Source adapters&#xa;Maps / TikTok / IG" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cfe2f3;strokeColor=#6c8ebf;fontStyle=1;" vertex="1" parent="20">
+          <mxGeometry x="105" y="170" width="240" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="24" value="Extract + normalize&#xa;common schema" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cfe2f3;strokeColor=#6c8ebf;" vertex="1" parent="20">
+          <mxGeometry x="105" y="285" width="240" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="25" value="Validate + dedupe" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cfe2f3;strokeColor=#6c8ebf;" vertex="1" parent="20">
+          <mxGeometry x="105" y="385" width="240" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="26" value="Run metrics + logs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#cfe2f3;strokeColor=#6c8ebf;" vertex="1" parent="20">
+          <mxGeometry x="105" y="465" width="240" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="30" value="Storage (Directus / PostgreSQL)" style="swimlane;html=1;rounded=1;whiteSpace=wrap;startSize=30;fillColor=#e8edf7;strokeColor=#5b7db1;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="900" y="70" width="360" height="500" as="geometry"/>
+        </mxCell>
+        <mxCell id="31" value="cafes" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="30">
+          <mxGeometry x="75" y="60" width="210" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="32" value="google_reviews" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="30">
+          <mxGeometry x="75" y="160" width="210" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="33" value="social_mentions" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="30">
+          <mxGeometry x="75" y="260" width="210" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="34" value="scrape_runs" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="30">
+          <mxGeometry x="75" y="360" width="210" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="40" value="Samarinda Coffeeshop Discovery Site" style="swimlane;html=1;rounded=1;whiteSpace=wrap;startSize=30;fillColor=#f3e8f7;strokeColor=#8f5da2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1310" y="190" width="260" height="250" as="geometry"/>
+        </mxCell>
+        <mxCell id="41" value="API/Query Layer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eadcf2;strokeColor=#9673a6;" vertex="1" parent="40">
+          <mxGeometry x="30" y="55" width="200" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="42" value="Cafe pages + reviews + media" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#eadcf2;strokeColor=#9673a6;" vertex="1" parent="40">
+          <mxGeometry x="30" y="145" width="200" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="50" value="Note: moderation/approval workflow is intentionally postponed until team alignment." style="shape=mxgraph.flowchart.annotation_2;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;" vertex="1" parent="1">
+          <mxGeometry x="40" y="540" width="500" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="100" value="crawl" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;html=1;strokeColor=#b26b2e;" edge="1" parent="1" source="11" target="23">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="101" value="crawl" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;html=1;strokeColor=#b26b2e;" edge="1" parent="1" source="12" target="23">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="102" value="crawl" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;html=1;strokeColor=#b26b2e;" edge="1" parent="1" source="13" target="23">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="103" value="trigger" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;html=1;strokeColor=#4f8a5b;" edge="1" parent="1" source="21" target="23">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="104" value="seed data" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;html=1;strokeColor=#4f8a5b;" edge="1" parent="1" source="22" target="23">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="105" value="normalize" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;html=1;strokeColor=#6c8ebf;" edge="1" parent="1" source="23" target="24">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="106" value="quality checks" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;html=1;strokeColor=#6c8ebf;" edge="1" parent="1" source="24" target="25">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="107" value="job status" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;html=1;strokeColor=#6c8ebf;" edge="1" parent="1" source="25" target="26">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="108" value="upsert" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;html=1;strokeColor=#5b7db1;" edge="1" parent="1" source="25" target="31">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="109" value="reviews" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;html=1;strokeColor=#5b7db1;" edge="1" parent="1" source="25" target="32">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="110" value="social posts" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;html=1;strokeColor=#5b7db1;" edge="1" parent="1" source="25" target="33">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="111" value="write metrics" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;html=1;strokeColor=#5b7db1;" edge="1" parent="1" source="26" target="34">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="112" value="read" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;html=1;strokeColor=#9673a6;" edge="1" parent="1" source="31" target="41">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="113" value="read" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;html=1;strokeColor=#9673a6;" edge="1" parent="1" source="32" target="41">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="114" value="read" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;html=1;strokeColor=#9673a6;" edge="1" parent="1" source="33" target="41">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="115" value="serve pages" style="edgeStyle=orthogonalEdgeStyle;rounded=1;jettySize=auto;html=1;strokeColor=#9673a6;" edge="1" parent="1" source="41" target="42">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

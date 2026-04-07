@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "fixtures": [
+    {
+      "category": "duplicate_exact_page",
+      "path": "google_maps/duplicate_exact_page.json",
+      "record_count": 2,
+      "source": "derived from google_maps_raw_20260405_201932.json record 1"
+    },
+    {
+      "category": "same_business_different_short_url",
+      "path": "google_maps/same_business_different_short_url.json",
+      "record_count": 2,
+      "source": "derived from google_maps_raw_20260405_201932.json records 1-2"
+    },
+    {
+      "category": "broken_google_place_id",
+      "path": "google_maps/broken_google_place_id.json",
+      "record_count": 1,
+      "source": "derived from google_maps_raw_20260405_201932.json record 1"
+    },
+    {
+      "category": "binding_mismatch",
+      "path": "google_maps/binding_mismatch.json",
+      "record_count": 2,
+      "source": "derived from google_maps_raw_20260405_201932.json records 2-3"
+    }
+  ],
+  "same_day_multi_file": {
+    "category": "same_day_multi_file_extraction",
+    "base_dir": "raw/2026-04-05/google_maps",
+    "files": [
+      "raw/2026-04-05/google_maps/google_maps_raw_fixture_part1.json",
+      "raw/2026-04-05/google_maps/google_maps_raw_fixture_part2.json"
+    ],
+    "record_count": 4,
+    "source": "split deterministic subset of google_maps_raw_20260405_201932.json for repeated same-day loads"
+  }
+}
