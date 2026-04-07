@@ -506,6 +506,77 @@ class ExtractionRegressionTests(unittest.TestCase):
             "binding mismatch fixture should not trigger a dedupe conflict quarantine when the businesses genuinely differ",
         )
 
+    def test_run_extraction_prefers_persisted_google_raw_contract_fields(self) -> None:
+        record = deepcopy(load_google_fixture("same_business_different_short_url")[0])
+        canonical_maps_link = str(record["raw"]["maps_link"])
+        canonical_place_id = extract_validated_google_place_token(canonical_maps_link)
+
+        record["source_record_id"] = "https://maps.app.goo.gl/outdatedLegacySource"
+        record["raw"]["latitude"] = ""
+        record["raw"]["longitude"] = ""
+        record["raw"]["maps_link"] = ""
+        record["raw"]["gmaps_url"] = "https://maps.app.goo.gl/outdatedLegacyShort"
+        record["raw"]["canonical_place_url"] = canonical_maps_link
+        record["raw"]["canonical_place_key"] = build_google_maps_exact_page_key(
+            canonical_maps_link
+        )
+        record["raw"]["validated_google_place_id"] = canonical_place_id
+
+        summary, outputs = self.run_google_extraction(
+            {"persisted_google_contract.json": [record]}
+        )
+
+        self.assertEqual(summary["cafes"], 1)
+        self.assertEqual(outputs["quarantine_cafes"], [])
+        self.assertEqual(
+            outputs["cafes"][0]["gmaps_url"],
+            canonical_maps_link,
+            "persisted canonical Google raw fields should remain the primary extraction contract when legacy short-link fields drift",
+        )
+        self.assertEqual(
+            outputs["cafes"][0]["latitude"],
+            -0.4857808,
+            "extractor should recover latitude from the persisted canonical Google contract before falling back to legacy short links",
+        )
+        self.assertEqual(
+            outputs["cafes"][0]["longitude"],
+            117.1123437,
+            "extractor should recover longitude from the persisted canonical Google contract before falling back to legacy short links",
+        )
+
+    def test_run_extraction_legacy_flat_payload_uses_maps_link_before_short_gmaps_url(
+        self,
+    ) -> None:
+        fixture_record = deepcopy(load_google_fixture("same_business_different_short_url")[0])
+        legacy_record = {
+            key: value for key, value in fixture_record.items() if key != "raw"
+        }
+        legacy_record.update(deepcopy(fixture_record["raw"]))
+        legacy_record["latitude"] = ""
+        legacy_record["longitude"] = ""
+
+        summary, outputs = self.run_google_extraction(
+            {"legacy_flat_google_payload.json": [legacy_record]}
+        )
+
+        self.assertEqual(summary["cafes"], 1)
+        self.assertEqual(outputs["quarantine_cafes"], [])
+        self.assertEqual(
+            outputs["cafes"][0]["gmaps_url"],
+            str(fixture_record["raw"]["maps_link"]),
+            "legacy flat Google payloads should still prefer the canonical maps_link over the short gmaps_url when rebuilding cafe links",
+        )
+        self.assertEqual(
+            outputs["cafes"][0]["latitude"],
+            -0.4857808,
+            "legacy flat payload fallback should recover latitude from maps_link before trying the short gmaps_url",
+        )
+        self.assertEqual(
+            outputs["cafes"][0]["longitude"],
+            117.1123437,
+            "legacy flat payload fallback should recover longitude from maps_link before trying the short gmaps_url",
+        )
+
     def test_run_extraction_merges_same_business_on_business_identity_when_exact_page_differs(
         self,
     ) -> None:
