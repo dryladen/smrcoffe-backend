@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(git rev-parse --show-toplevel)"
+needs_pipeline_subset=0
+
+while IFS= read -r path; do
+    case "$path" in
+        data-pipeline/*)
+            needs_pipeline_subset=1
+            break
+            ;;
+    esac
+done < <(git diff --cached --name-only --diff-filter=ACMR)
+
+if [[ "$needs_pipeline_subset" -eq 0 ]]; then
+    exit 0
+fi
+
+printf '%s\n' 'data-pipeline pre-commit: running offline regression subset from data-pipeline/'
+if ! (
+    cd "$repo_root/data-pipeline"
+    python -m unittest tests.test_dedup_regressions tests.test_extractor
+); then
+    printf '%s\n' 'Commit blocked: fast offline data-pipeline checks failed.' >&2
+    printf '%s\n' 'Re-run from data-pipeline/ because the suite depends on that working directory:' >&2
+    printf '%s\n' 'python -m unittest tests.test_dedup_regressions tests.test_extractor' >&2
+    exit 1
+fi

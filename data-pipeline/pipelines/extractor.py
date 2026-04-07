@@ -378,10 +378,59 @@ def _is_google_maps_short_link(url: str) -> bool:
     return normalized.startswith("https://maps.app.goo.gl/")
 
 
+def _build_google_exact_page_key_from_candidate(value: Any) -> str:
+    normalized_value = normalize_text(str(value or ""))
+    if not normalized_value:
+        return ""
+
+    if normalized_value.startswith("/maps/place/"):
+        return normalized_value
+
+    normalized_url = normalize_url(normalized_value)
+    google_place_match = re.search(
+        r"https?://(?:www\.)?google\.[^/]+(/maps/place/[^?#]+)",
+        normalized_url,
+        flags=re.IGNORECASE,
+    )
+    if google_place_match:
+        return normalize_text(google_place_match.group(1))
+
+    return ""
+
+
+def _google_maps_url_candidates(
+    raw_record: dict[str, Any], raw_payload: dict[str, Any]
+) -> list[str]:
+    candidates: list[str] = []
+    seen: set[str] = set()
+
+    for candidate in (
+        raw_payload.get("maps_link"),
+        raw_payload.get("canonical_place_url"),
+        raw_payload.get("final_page_url"),
+        raw_payload.get("discovery_url"),
+        raw_payload.get("gmaps_url"),
+        raw_record.get("source_record_id"),
+    ):
+        normalized_candidate = normalize_url(str(candidate or ""))
+        if not normalized_candidate or normalized_candidate in seen:
+            continue
+
+        parsed_candidate = normalize_url(str(candidate or ""))
+        if not re.match(r"^https?://", parsed_candidate, flags=re.IGNORECASE):
+            continue
+
+        seen.add(normalized_candidate)
+        candidates.append(normalized_candidate)
+
+    return candidates
+
+
 def _resolve_google_exact_page_identity(
     raw_record: dict[str, Any], raw: dict[str, Any] | None = None
 ) -> dict[str, str]:
     raw_payload = raw if isinstance(raw, dict) else {}
+    url_candidates = _google_maps_url_candidates(raw_record, raw_payload)
 
     canonical_place_key = normalize_text(
         str(raw_payload.get("canonical_place_key") or "")
@@ -396,28 +445,37 @@ def _resolve_google_exact_page_identity(
     gmaps_url = normalize_url(str(raw_payload.get("gmaps_url") or ""))
     source_record_id = normalize_text(str(raw_record.get("source_record_id") or ""))
     source_record_id_url = normalize_url(source_record_id)
+    source_record_id_exact_page_path = _build_google_exact_page_key_from_candidate(
+        source_record_id
+    )
+    derived_exact_page_key = ""
+    for candidate in url_candidates:
+        derived_exact_page_key = _build_google_exact_page_key_from_candidate(candidate)
+        if derived_exact_page_key:
+            break
 
     source_record_id_exact_page_key = ""
-    if source_record_id in {canonical_place_key, canonical_place_url, validated_google_place_id}:
-        source_record_id_exact_page_key = source_record_id
-    elif source_record_id_url and source_record_id_url in {
+    if source_record_id in {
+        canonical_place_key,
         canonical_place_url,
-        maps_link,
-        gmaps_url,
+        validated_google_place_id,
     }:
-        source_record_id_exact_page_key = source_record_id_url
-    elif source_record_id.startswith("/maps/place/"):
         source_record_id_exact_page_key = source_record_id
+    elif source_record_id_url and source_record_id_url in set(url_candidates):
+        source_record_id_exact_page_key = source_record_id_url
+    elif source_record_id_exact_page_path:
+        source_record_id_exact_page_key = source_record_id_exact_page_path
 
     exact_page_key = ""
     exact_page_source = ""
     for source_name, candidate in (
+        ("maps_link", maps_link),
+        ("derived_exact_page_key", derived_exact_page_key),
+        ("gmaps_url", gmaps_url),
+        ("source_record_id", source_record_id_exact_page_key),
         ("canonical_place_key", canonical_place_key),
         ("canonical_place_url", canonical_place_url),
         ("validated_google_place_id", validated_google_place_id),
-        ("maps_link", maps_link),
-        ("gmaps_url", gmaps_url),
-        ("source_record_id", source_record_id_exact_page_key),
     ):
         if candidate:
             exact_page_key = candidate
@@ -425,7 +483,7 @@ def _resolve_google_exact_page_identity(
             break
 
     exact_page_url = ""
-    for candidate in (canonical_place_url, maps_link, gmaps_url):
+    for candidate in url_candidates:
         if candidate:
             exact_page_url = candidate
             break
@@ -434,6 +492,7 @@ def _resolve_google_exact_page_identity(
         "exact_page_key": exact_page_key,
         "exact_page_source": exact_page_source,
         "exact_page_url": exact_page_url,
+        "derived_exact_page_key": derived_exact_page_key,
         "canonical_place_key": canonical_place_key,
         "canonical_place_url": canonical_place_url,
         "validated_google_place_id": validated_google_place_id,
@@ -539,6 +598,7 @@ def _build_google_business_identity(
         normalize_text(candidate)
         for candidate in (
             google_identity.get("exact_page_key", ""),
+            google_identity.get("derived_exact_page_key", ""),
             google_identity.get("canonical_place_key", ""),
             google_identity.get("canonical_place_url", ""),
             google_identity.get("validated_google_place_id", ""),
@@ -1049,14 +1109,25 @@ def normalize_google_maps_record(
     name = normalize_text(str(raw.get("name", "")))
     address = normalize_text(str(raw.get("address", "")))
     google_identity = _resolve_google_exact_page_identity(raw_record, raw)
-    raw_gmaps_url = normalize_url(str(raw.get("gmaps_url") or ""))
-    gmaps_url = raw_gmaps_url or google_identity["exact_page_url"]
+    gmaps_url = google_identity["exact_page_url"]
     latitude = _as_float(raw.get("latitude"))
     longitude = _as_float(raw.get("longitude"))
     if latitude is None or longitude is None:
-        fallback_latitude, fallback_longitude = _extract_coordinates_from_url(gmaps_url)
-        latitude = fallback_latitude if latitude is None else latitude
-        longitude = fallback_longitude if longitude is None else longitude
+        for coordinate_source in (
+            google_identity.get("maps_link", ""),
+            google_identity.get("canonical_place_url", ""),
+            google_identity.get("exact_page_url", ""),
+            google_identity.get("gmaps_url", ""),
+        ):
+            fallback_latitude, fallback_longitude = _extract_coordinates_from_url(
+                coordinate_source
+            )
+            if latitude is None and fallback_latitude is not None:
+                latitude = fallback_latitude
+            if longitude is None and fallback_longitude is not None:
+                longitude = fallback_longitude
+            if latitude is not None and longitude is not None:
+                break
     opening_time, closing_time, opening_days = _extract_opening_details(raw)
 
     missing_fields = [

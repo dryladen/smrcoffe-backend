@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+zero_sha="0000000000000000000000000000000000000000"
+empty_tree_sha="4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+repo_root="$(git rev-parse --show-toplevel)"
+
+collect_changed_files() {
+    local local_ref local_sha remote_ref remote_sha
+
+    while IFS=' ' read -r local_ref local_sha remote_ref remote_sha; do
+        if [[ -z "${local_sha:-}" || "$local_sha" == "$zero_sha" ]]; then
+            continue
+        fi
+
+        if [[ "${remote_sha:-$zero_sha}" == "$zero_sha" ]]; then
+            git diff --name-only "$empty_tree_sha" "$local_sha"
+        else
+            git diff --name-only "$remote_sha" "$local_sha"
+        fi
+    done
+
+    git diff --cached --name-only --diff-filter=ACMR
+}
+
+needs_pipeline_suite=0
+while IFS= read -r path; do
+    case "$path" in
+        data-pipeline/*|.githooks/*|scripts/install-hooks.sh|.github/workflows/data-pipeline.yml)
+            needs_pipeline_suite=1
+            break
+            ;;
+    esac
+done < <(collect_changed_files | sort -u)
+
+if [[ "$needs_pipeline_suite" -eq 0 ]]; then
+    exit 0
+fi
+
+printf '%s\n' 'data-pipeline pre-push: running full offline unittest suite from data-pipeline/'
+if ! (
+    cd "$repo_root/data-pipeline"
+    python -m unittest discover -s tests
+); then
+    printf '%s\n' 'Push blocked: data-pipeline tests failed.' >&2
+    printf '%s\n' 'Re-run from data-pipeline/ because the suite depends on that working directory:' >&2
+    printf '%s\n' 'python -m unittest discover -s tests' >&2
+    exit 1
+fi
